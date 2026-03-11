@@ -10,10 +10,10 @@ export interface Todo {
  description: string;
  category: string;
  completed: boolean;
- userId: number;
+ userId: number; // Foreign key referencing User
 }
 
-// passwords are bcrypt hashes (cost 10)
+// Passwords are bcrypt hashes (cost 10)
 // Dom: Simuhealth123
 // Sam: SammyLu56
 // Rioto: REI11307
@@ -33,6 +33,7 @@ export const todos: Todo[] = [
  { id: 7, title: "AWS", description: "Research AWS and find learning tools for it", category: "study", completed: true, userId: 1 },
 ]
 
+// Get current last id, then increment by 1
 export const idCounters = {
  todoIdCounter: todos.length + 1,
 }

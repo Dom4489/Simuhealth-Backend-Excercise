@@ -71,7 +71,7 @@ const createTodo = (request: Request, response: Response): void => {
 const deleteTodo = (request: Request, response: Response): void => {
 
  const todoId = Number(request.params.id);
- const todoItem = todos.find(t => t.id === todoId);
+ const todoItem = todos.find(todo => todo.id === todoId);
 
  // If no todo with this id exists, return error
  if (!todoItem) {
@@ -94,7 +94,7 @@ const deleteTodo = (request: Request, response: Response): void => {
 // Updates an existing todo, only the user who created it can update it
 const updateTodo = (request: Request, response: Response): void => {
  const todoId = Number(request.params.id);
- const todoItem = todos.find(t => t.id === todoId);
+ const todoItem = todos.find(todo => todo.id === todoId);
 
  // If no todo with this id exists, return error
  if (!todoItem) {
@@ -108,7 +108,12 @@ const updateTodo = (request: Request, response: Response): void => {
   return;
  }
 
+ // PUT requires all fields to be present, reject if any are missing
  const { title, description, category, completed } = request.body;
+ if (!title || !description || !category || completed === undefined) {
+     response.status(400).json({ error: "PUT requires all fields: title, description, category, completed" });
+     return;
+ }
  const updatedTodo = { ...todoItem, title, description, category, completed };
 
  // Replace the old todo in the array
@@ -117,4 +122,31 @@ const updateTodo = (request: Request, response: Response): void => {
  response.status(200).json(updatedTodo);
 };
 
-export default { getTodos, createTodo, deleteTodo, updateTodo };
+// Partially updates a todo — only sends the fields you want to change
+const patchTodo = (request: Request, response: Response): void => {
+ const todoId = Number(request.params.id);
+ const todoItem = todos.find(todo => todo.id === todoId);
+
+ // If no todo with this id exists, return error
+ if (!todoItem) {
+  response.status(404).json({ error: "todo item not found" });
+  return;
+ }
+
+ // Ownership check
+ if (request.user!.id !== todoItem.userId) {
+  response.status(403).json({ error: "you must be the owner to update this todo item" });
+  return;
+ }
+
+ // Only overwrite the fields that were actually sent
+ // Unlike PUT, fields omitted from the body are kept as there were
+ const updatedTodo = { ...todoItem, ...request.body };
+
+ // Replace the old todo in the array
+ todos[todos.indexOf(todoItem)] = updatedTodo;
+
+ response.status(200).json(updatedTodo);
+};
+
+export default { getTodos, createTodo, deleteTodo, updateTodo, patchTodo };
