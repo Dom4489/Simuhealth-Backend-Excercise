@@ -4,12 +4,11 @@ A simple REST API for managing todo list items with user authentication.
 
 ## Technologies
 
-- **Node.js** — runtime environment
-- **Express** — HTTP server and routing
-- **TypeScript** — type safety on top of JavaScript
-- **bcryptjs** — password hashing
-- **jsonwebtoken** — JWT-based authentication
-- **dotenv** — loads environment variables from `.env`
+- **Node.js**: runtime environment
+- **Express**: HTTP server and routing
+- **TypeScript**
+- **bcryptjs**: password hashing
+- **jsonwebtoken**: JWT-based authentication
 
 ## File Architecture
 
@@ -40,6 +39,10 @@ npm install
 npx nodemon server.ts
 ```
 
+## .env variable values
+- PORT=3000
+- JWT_SECRET=supersecretkey
+
 ## Endpoints
 
 | Method | Path | Auth | Description |
@@ -52,3 +55,4 @@ npx nodemon server.ts
 | DELETE | `/todos/:id` | Yes | Delete a todo |
 
 Protected routes require `Authorization: Bearer <token>` in the request header.
+Tested with Postman.
