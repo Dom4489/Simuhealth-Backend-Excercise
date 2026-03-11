@@ -32,16 +32,16 @@ A simple REST API for managing todo list items with user authentication.
 └── server.ts               # entry point
 ```
 
+## .env variable values
+- PORT=3000
+- JWT_SECRET=supersecretkey
+
 ## Getting Started
 
 ```bash
 npm install
 npx nodemon server.ts
 ```
-
-## .env variable values
-- PORT=3000
-- JWT_SECRET=supersecretkey
 
 ## Endpoints
 
@@ -55,4 +55,5 @@ npx nodemon server.ts
 | DELETE | `/todos/:id` | Yes | Delete a todo |
 
 Protected routes require `Authorization: Bearer <token>` in the request header.
+Request logger middleware provided for testing/debugging.
 Tested with Postman.
